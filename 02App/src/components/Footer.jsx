@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 const Footer = ({ length }) => {
     // const today = new Date();
     return (

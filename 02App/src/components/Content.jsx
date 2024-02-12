@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import ItemList from "./ItemList";
 
 const Content = ({ items, handleCheck, handleDelete }) => {

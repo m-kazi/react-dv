@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { FaTrashAlt } from "react-icons/fa";
 
 const LineItems = ({ item, handleCheck, handleDelete }) => {
