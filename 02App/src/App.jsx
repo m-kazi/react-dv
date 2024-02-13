@@ -41,7 +41,7 @@ function App() {
             <Header title="Grocery List" />
             <Content
                 items={items}
-                handleChange={handleCheck}
+                handleCheck={handleCheck}
                 handleDelete={handleDelete}
             />
             <Footer length={items.length} />
