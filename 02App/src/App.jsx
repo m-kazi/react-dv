@@ -1,48 +1,55 @@
 import Header from "./components/Header";
+import SearchItems from "./components/SearchItems";
 import AddItem from "./components/AddItem";
 import Content from "./components/Content";
 import Footer from "./components/Footer";
 import { useState } from "react";
 
 function App() {
-    const [items, setItems] = useState([
-        {
-            id: 1,
-            checked: false,
-            item: "One half pound of Cocoa",
-        },
-        {
-            id: 2,
-            checked: false,
-            item: "Item 2",
-        },
-        {
-            id: 3,
-            checked: false,
-            item: "Item 3",
-        },
-    ]);
+    const [items, setItems] = useState(
+        JSON.parse(localStorage.getItem("shoppinglist"))
+    );
 
-    // state management for the new item add
+    // state management
     const [newItem, setNewItem] = useState("");
+    const [search, setSearch] = useState("");
+
+    // method to save items
+    const setAndSaveItems = (newItems) => {
+        setItems(newItems);
+        localStorage.setItem("shoppinglist", JSON.stringify(newItems));
+    };
+
+    //ternary - id = if items, will grab the list by the end (-1) & increment
+    const addItem = (item) => {
+        const id = items.length ? items[items.length - 1].id + 1 : 1;
+        const myNewItem = {
+            id,
+            checked: false,
+            item,
+        };
+        const listItems = [...items, myNewItem];
+        setAndSaveItems(listItems);
+    };
 
     const handleCheck = (id) => {
         const listItems = items.map((item) =>
             item.id === id ? { ...item, checked: !item.checked } : item
         );
-        setItems(listItems);
-        localStorage.setItem("shoppionglist", JSON.stringify(listItems));
+        setAndSaveItems(listItems);
     };
 
     const handleDelete = (id) => {
         const listItems = items.filter((item) => item.id !== id);
-        setItems(listItems);
-        localStorage.setItem("shoppionglist", JSON.stringify(listItems));
+        setAndSaveItems(listItems);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("submitted");
+        if (!newItem) return;
+        console.log(newItem);
+        addItem(newItem);
+        setNewItem("");
     };
 
     return (
@@ -53,8 +60,12 @@ function App() {
                 setNewItem={setNewItem}
                 handleSubmit={handleSubmit}
             />
+            <SearchItems search={search} setSearch={setSearch} />
+
             <Content
-                items={items}
+                items={items.filter((item) =>
+                    item.item.toLowerCase().includes(search.toLowerCase())
+                )}
                 handleCheck={handleCheck}
                 handleDelete={handleDelete}
             />
