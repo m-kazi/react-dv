@@ -3,22 +3,21 @@ import SearchItems from "./components/SearchItems";
 import AddItem from "./components/AddItem";
 import Content from "./components/Content";
 import Footer from "./components/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
     const [items, setItems] = useState(
-        JSON.parse(localStorage.getItem("shoppinglist"))
+        JSON.parse(localStorage.getItem("shoppinglist")) || []
     );
 
     // state management
     const [newItem, setNewItem] = useState("");
     const [search, setSearch] = useState("");
 
-    // method to save items
-    const setAndSaveItems = (newItems) => {
-        setItems(newItems);
-        localStorage.setItem("shoppinglist", JSON.stringify(newItems));
-    };
+    //will look into the items and save locally
+    useEffect(() => {
+        localStorage.setItem("shoppinglist", JSON.stringify(items));
+    }, [items]);
 
     //ternary - id = if items, will grab the list by the end (-1) & increment
     const addItem = (item) => {
@@ -29,25 +28,25 @@ function App() {
             item,
         };
         const listItems = [...items, myNewItem];
-        setAndSaveItems(listItems);
+        setItems(listItems);
     };
 
     const handleCheck = (id) => {
         const listItems = items.map((item) =>
             item.id === id ? { ...item, checked: !item.checked } : item
         );
-        setAndSaveItems(listItems);
+        setItems(listItems);
     };
 
     const handleDelete = (id) => {
         const listItems = items.filter((item) => item.id !== id);
-        setAndSaveItems(listItems);
+        setItems(listItems);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!newItem) return;
-        console.log(newItem);
+        // console.log(newItem);
         addItem(newItem);
         setNewItem("");
     };
